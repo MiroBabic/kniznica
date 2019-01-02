@@ -1,0 +1,259 @@
+<p id="notice"><%= render 'layouts/flash_message' %></p>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>Knihy</h2>
+    <ol class="breadcrumb">
+      <li>
+        <%= link_to 'Home', root_path %>
+      </li>
+      <li class="active">
+        <strong>Knihy</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-lg-2">
+
+  </div>
+</div>
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+   <div class="col-lg-12">
+     <div class="ibox float-e-margins">
+      <div class="ibox-content">
+        <button type="button" class="btn btn-success" id="add_book_button" data-toggle="modal" data-target="#addBookModal">Pridaj novú knihu</button>
+        
+        <hr>
+        <div class="table-responsive">
+          <table class="table table-bordered" id="books" style="width:100%">
+  <thead>
+    <tr>
+      <th>Názov</th>
+      <th>Autor</th>
+      <th>Vydavateľ</th>
+      <th>Rok vydania</th>
+      <th>Hodnotenie</th>
+      <th>Vložil</th>
+      <th>Poznámka</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @books.each do |book| %>
+      <tr>
+        <td><%= book.name %></td>
+        <td><%= book.author.name if book.author.present? %></td>
+        <td><%= book.publisher.name if book.publisher.present? %></td>
+        <td><%= book.publish_year %></td>
+        <td><%= book.rating %></td>
+        <td><%= book.user.name %></td>
+        <td><%= book.note %></td>
+          <td><a class="edit_book_table_btn" data-toggle="modal" data-target="#editBookModal"><i id="<%=book.id%>" class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></a></td>
+        <td><%= link_to  book, method: :delete, data: { confirm: 'Naozaj ju chceš zmazať?' } do %><i class="fa fa-trash-o fa-2x" aria-hidden="true" ></i>  
+                <% end %></td>
+
+   
+      </tr>
+    <% end %>
+   </tbody>
+ </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<br>
+
+<div id="addBookModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h2 class="modal-title" id="myModalLabel">Pridaj knihu </h2>
+       
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-danger noborders">
+   Polia vyznačené na červeno sú povinné
+  </div>
+        <div class="form-group has-error">
+            <label>Názov:</label><input type="text" name="bookname" id="bookname" class="form-control" placeholder="Názov" /><br>
+            </div>
+             <label>Autor:</label><%= select_tag 'author', options_from_collection_for_select(@authors, 'id', 'name'), class: 'form-control', id: 'author',prompt: "--vyber autora--" %><br>
+             <label>Vydavateľ:</label><%= select_tag 'publisher', options_from_collection_for_select(@publishers, 'id', 'name'), class: 'form-control', id: 'publisher',prompt: "--vyber vydavateľa--" %><br>
+            <label>Rok vydania:</label><input type="number" name="publish_year" id="publish_year" class="form-control" placeholder="Zadaj rok" /><br>
+           <label>Poznámka:</label><input type="text" name="note" id="note" class="form-control" placeholder="Názov" /><br>
+           
+       
+       <button id="addbookconfirm" type="button" class="addbook btn btn-success">Pridaj</button>
+ 
+   </div>
+ </div>
+</div>
+</div>
+
+<div id="editBookModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h2 class="modal-title" id="myModalLabel">Uprav knihu </h2>
+       
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-danger noborders">
+   Polia vyznačené na červeno sú povinné
+  </div>
+        <div class="form-group has-error">
+           <input style="visibility:hidden" type="text" name="editbookID" id="editbookID" value="" readonly>
+             <label>Názov:</label><input type="text" name="bookname" id="bookname" class="form-control" placeholder="Názov" /><br>
+            </div>
+             <label>Autor:</label><%= select_tag 'author', options_from_collection_for_select(@authors, 'id', 'name'), class: 'form-control', id: 'author',prompt: "--vyber autora--" %><br>
+             <label>Vydavateľ:</label><%= select_tag 'publisher', options_from_collection_for_select(@publishers, 'id', 'name'), class: 'form-control', id: 'publisher',prompt: "--vyber vydavateľa--" %><br>
+            <label>Rok vydania:</label><input type="number" name="publish_year" id="publish_year" class="form-control" placeholder="Zadaj rok" /><br>
+           <label>Poznámka:</label><input type="text" name="note" id="note" class="form-control" placeholder="Názov" /><br>
+           
+           
+           
+       
+       <button id="editbookconfirm" type="button" class="editbook btn btn-success">Uprav</button>
+ 
+   </div>
+ </div>
+</div>
+</div>
+
+<script>
+var booktable;
+
+var tableready = function() {
+
+
+
+ booktable= $('#books').DataTable({
+  'order': [2, 'desc'],
+  'serverSide': false,
+  'stateSave' :true,
+  'dom': 'lfr<"pull-right"B>tip',
+  'buttons': [
+  {"extend" : 'copyHtml5',"text":"Copy","className": 'btn btn-default btn-xs'},
+  {"extend" : 'excelHtml5',"text": "XLS","className": 'btn btn-default btn-xs'},
+  {"extend" : 'csvHtml5',"text": "CSV","className": 'btn btn-default btn-xs'},
+
+  {
+    text: 'TXT',
+    extend: 'csvHtml5',
+    fieldSeparator: '\t',
+    extension: '.txt',
+    "className": 'btn btn-default btn-xs'
+  },
+  {"extend" : 'pdfHtml5',"text": "PDF","className": 'btn btn-default btn-xs'},
+
+  ],
+  'language': {
+        'url': '/datatables_slovak.json'
+      },
+  'lengthMenu': [
+  [10, 50,100, -1],
+  [10, 50,100, "All"]
+  ]
+
+});
+
+ $('.edit_book_table_btn').on('click',function(event){
+  //$book_id=event.target.id;
+  $("#editbookID").val(event.target.id);
+  $row = $(event.target).closest('tr');
+  $("#edit_bookname").val($("td:eq(0)",$row).text());
+  $("#edit_bookcountry").val($("td:eq(1)",$row).text())
+
+
+
+
+ });
+
+
+$('.editbook').on('click',function(event){
+          //console.log(event.target.id);
+          
+          $book_id = $("#editbookID").val();
+          $name = $('#edit_bookname').val();
+          $country = $('#edit_bookcountry').val();
+         
+
+              $.ajax({
+            type: "POST",
+            url: "/modal_edit_book",
+             data: {
+              bookID: $book_id,
+              name: $name,
+              country: $country},
+         
+
+            success:function(data){
+              if (data.status == "ok")
+              {
+                alert("Vydavateľ bol upravený" );
+                location.reload();
+              }
+              else { alert("Error");}
+
+
+            }
+          });
+          
+
+
+
+        });
+
+$('.addbook').on('click',function(event){
+          //console.log(event.target.id);
+          
+          $name = $('#bookname').val();
+          $country = $('#bookcountry').val();
+                  
+
+              $.ajax({
+            type: "POST",
+            url: "/modal_create_book",
+            data: {
+              name: $name,
+              country: $country,
+             },
+
+            success:function(data){
+              if (data.status == "ok")
+              {
+                alert("Vydavateľ bol vytvorený" );
+                location.reload();
+              }
+              else { alert(data.status);}
+
+
+            }
+          });
+          
+
+
+
+        });
+
+
+};
+$(".books.index").ready(tableready);
+
+
+document.addEventListener('turbolinks:before-cache', function() {
+ if ($('#books_wrapper').length ==1) {booktable.destroy() ;} 
+
+});
+
+
+$(".books.index").on('turbolinks:load', tableready); 
+</script>

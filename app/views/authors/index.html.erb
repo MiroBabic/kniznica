@@ -1,0 +1,260 @@
+<p id="notice"><%= render 'layouts/flash_message' %></p>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>Autori</h2>
+    <ol class="breadcrumb">
+      <li>
+        <%= link_to 'Home', root_path %>
+      </li>
+      <li class="active">
+        <strong>Autori</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-lg-2">
+
+  </div>
+</div>
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+   <div class="col-lg-12">
+     <div class="ibox float-e-margins">
+      <div class="ibox-content">
+        <button type="button" class="btn btn-success" id="add_author_button" data-toggle="modal" data-target="#addAuthorModal">Pridaj nového autora</button>
+        
+        <hr>
+        <div class="table-responsive">
+          <table class="table table-bordered" id="authors" style="width:100%">
+  <thead>
+    <tr>
+      <th class="hidden">ID</th>
+      <th>Meno</th>
+      <th>Krajina</th>
+      <th>Rok narodenia</th>
+      <th>Rok úmrtia</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @authors.each do |author| %>
+      <tr>
+        <td class="hidden"><%= author.id %></td>
+        <td><%= author.name %></td>
+        <td><%= author.country %></td>
+        <td><%= author.birth_year %></td>
+        <td><%= author.dead_year %></td>
+        
+
+        <td><a class="edit_author_table_btn" data-toggle="modal" data-target="#editAuthorModal"><i id="<%=author.id%>" class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></a></td>
+        <td><%= link_to  author, method: :delete, data: { confirm: 'Naozaj ho chceš zmazať?' } do %><i class="fa fa-trash-o fa-2x" aria-hidden="true" ></i>  
+                <% end %></td>
+
+         
+        
+      </tr>
+    <% end %>
+  </tbody>
+ </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<br>
+
+<div id="addAuthorModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h2 class="modal-title" id="myModalLabel">Pridaj autora </h2>
+       
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-danger noborders">
+   Polia vyznačené na červeno sú povinné
+  </div>
+        <div class="form-group has-error">
+            <label>Meno:</label><input type="text" name="authorname" id="authorname" class="form-control" placeholder="Meno" /><br>
+            </div>
+            <label>Krajina:</label><input type="text" name="authorcountry" id="authorcountry" class="form-control" placeholder="Krajina" /><br>
+            <label>Rok narodenia:</label><input type="number" name="authorbirth" id="authorbirth" class="form-control" placeholder="Zadaj rok" /><br>
+            <label>Rok úmrtia:</label><input type="number" name="authordeath" id="authordeath" class="form-control" placeholder="Zadaj rok" /><br>
+           
+       
+       <button id="addauthorconfirm" type="button" class="addauthor btn btn-success">Pridaj</button>
+ 
+   </div>
+ </div>
+</div>
+</div>
+
+<div id="editAuthorModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h2 class="modal-title" id="myModalLabel">Uprav autora </h2>
+       
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-danger noborders">
+   Polia vyznačené na červeno sú povinné
+  </div>
+        <div class="form-group has-error">
+           <input style="visibility:hidden" type="text" name="editauthorID" id="editauthorID" value="" readonly>
+            <label>Meno:</label><input type="text" name="edit_authorname" id="edit_authorname" class="form-control" placeholder="Meno" /><br>
+            </div>
+            <label>Krajina:</label><input type="text" name="edit_authorcountry" id="edit_authorcountry" class="form-control" placeholder="Krajina" /><br>
+            <label>Rok narodenia:</label><input type="number" name="edit_authorbirth" id="edit_authorbirth" class="form-control" placeholder="Zadaj rok" /><br>
+            <label>Rok úmrtia:</label><input type="number" name="edit_authordeath" id="edit_authordeath" class="form-control" placeholder="Zadaj rok" /><br>
+           
+       
+       <button id="editauthorconfirm" type="button" class="editauthor btn btn-success">Uprav</button>
+ 
+   </div>
+ </div>
+</div>
+</div>
+
+<script>
+var authortable;
+
+var tableready = function() {
+
+
+
+ authortable= $('#authors').DataTable({
+  'order': [2, 'desc'],
+  'serverSide': false,
+  'stateSave' :true,
+  'dom': 'lfr<"pull-right"B>tip',
+  'buttons': [
+  {"extend" : 'copyHtml5',"text":"Copy","className": 'btn btn-default btn-xs'},
+  {"extend" : 'excelHtml5',"text": "XLS","className": 'btn btn-default btn-xs'},
+  {"extend" : 'csvHtml5',"text": "CSV","className": 'btn btn-default btn-xs'},
+
+  {
+    text: 'TXT',
+    extend: 'csvHtml5',
+    fieldSeparator: '\t',
+    extension: '.txt',
+    "className": 'btn btn-default btn-xs'
+  },
+  {"extend" : 'pdfHtml5',"text": "PDF","className": 'btn btn-default btn-xs'},
+
+  ],
+  'language': {
+        'url': '/datatables_slovak.json'
+      },
+  'lengthMenu': [
+  [10, 50,100, -1],
+  [10, 50,100, "All"]
+  ]
+
+});
+
+ $('.edit_author_table_btn').on('click',function(event){
+  //$author_id=event.target.id;
+  $("#editauthorID").val(event.target.id);
+  $row = $(event.target).closest('tr');
+  $("#edit_authorname").val($("td:eq(1)",$row).text());
+  $("#edit_authorcountry").val($("td:eq(2)",$row).text())
+  $("#edit_authorbirth").val($("td:eq(3)",$row).text())
+  $("#edit_authordeath").val($("td:eq(4)",$row).text())
+
+
+
+ });
+
+
+$('.editauthor').on('click',function(event){
+          //console.log(event.target.id);
+          
+          $author_id = $("#editauthorID").val();
+          $authname = $('#edit_authorname').val();
+          $authcountry = $('#edit_authorcountry').val();
+          $birthyear = $('#edit_authorbirth').val();
+          $deadyear = $('#edit_authordeath').val();
+
+              $.ajax({
+            type: "POST",
+            url: "/modal_edit_author",
+             data: {
+              authorID: $author_id,
+              authname: $authname,
+              authcountry: $authcountry,
+              birthyear: $birthyear,
+              deadyear: $deadyear},
+
+            success:function(data){
+              if (data.status == "ok")
+              {
+                alert("Autor bol upravený" );
+                location.reload();
+              }
+              else { alert("Error");}
+
+
+            }
+          });
+          
+
+
+
+        });
+
+$('.addauthor').on('click',function(event){
+          //console.log(event.target.id);
+          
+          $authname = $('#authorname').val();
+          $authcountry = $('#authorcountry').val();
+          $birthyear = $('#authorbirth').val();
+          $deadyear = $('#authordeath').val();
+          
+
+              $.ajax({
+            type: "POST",
+            url: "/modal_create_author",
+            data: {
+              authname: $authname,
+              authcountry: $authcountry,
+              birthyear: $birthyear,
+              deadyear: $deadyear},
+
+            success:function(data){
+              if (data.status == "ok")
+              {
+                alert("Autor bol vytvorený" );
+                location.reload();
+              }
+              else { alert(data.status);}
+
+
+            }
+          });
+          
+
+
+
+        });
+
+
+};
+$(".authors.index").ready(tableready);
+
+
+document.addEventListener('turbolinks:before-cache', function() {
+ if ($('#authors_wrapper').length ==1) {authortable.destroy() ;} 
+
+});
+
+
+$(".authors.index").on('turbolinks:load', tableready); 
+</script>

@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Kniznica</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+    
+  <% if content_for?(:head_attributes) %>
+    <%= yield(:head_attributes) %> 
+  <% end %>
+</head>
+<% if user_signed_in? %>   
+<body class="<%= controller_name %> <%= action_name %> pace-done"
+  <% if content_for?(:body_attributes) %>
+    <%= yield(:body_attributes) %> 
+  <% end %>
+  >
+  <div id="wrapper">
+        <!--<div id="page-wrapper" class="gray-bg">-->
+    
+ <%= render 'layouts/sidebar' %>
+ 
+ <div id="page-wrapper" class="gray-bg dashbard-1" style="min-height: 1181px;">
+        <div class="row border-bottom">
+ 
+ <%= render 'layouts/header' %>
+ 
+</div>
+<div class="wrapper wrapper-content">
+         <!--   <div class="container">-->
+
+           
+<%= yield %>
+
+
+  <!--</div>-->
+
+    
+</div>
+
+<%= render 'layouts/footer' %>
+
+</div>
+
+
+
+</div>
+
+
+</body>
+<% else %>
+
+
+
+
+<body class="gray-bg">
+<p id="notice"><%= render 'layouts/flash_message' %></p>
+    <div class="middle-box text-center loginscreen animated fadeInDown">
+        <div>
+            <div style="margin-left: -40px">
+
+              <!--  <h1 class="logo-name">SO+</h1>-->
+              
+            </div>
+            <h3>Kniznica</h3>
+            <p>Prihlás sa emailom</p>
+            <%= yield %>
+            <p class="m-t"> <small>BlackRuby &copy; 2019</small> </p>
+        </div>
+    </div>
+
+   
+</body>
+<% end %>
+</html>

@@ -1,0 +1,242 @@
+<p id="notice"><%= render 'layouts/flash_message' %></p>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>Vydavateľstvá</h2>
+    <ol class="breadcrumb">
+      <li>
+        <%= link_to 'Home', root_path %>
+      </li>
+      <li class="active">
+        <strong>Vydavateľstvá</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-lg-2">
+
+  </div>
+</div>
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+   <div class="col-lg-12">
+     <div class="ibox float-e-margins">
+      <div class="ibox-content">
+        <button type="button" class="btn btn-success" id="add_publisher_button" data-toggle="modal" data-target="#addPublisherModal">Pridaj nového vydavateľa</button>
+        
+        <hr>
+        <div class="table-responsive">
+          <table class="table table-bordered" id="publishers" style="width:100%">
+  <thead>
+    <tr>
+      <th>Názov</th>
+      <th>Krajina</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @publishers.each do |publisher| %>
+      <tr>
+        <td><%= publisher.name %></td>
+        <td><%= publisher.country %></td>
+        
+         <td><a class="edit_publisher_table_btn" data-toggle="modal" data-target="#editPublisherModal"><i id="<%=publisher.id%>" class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></a></td>
+        <td><%= link_to  publisher, method: :delete, data: { confirm: 'Naozaj ho chceš zmazať?' } do %><i class="fa fa-trash-o fa-2x" aria-hidden="true" ></i>  
+                <% end %></td>
+      </tr>
+    <% end %>
+ </tbody>
+ </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<br>
+
+<div id="addPublisherModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h2 class="modal-title" id="myModalLabel">Pridaj autora </h2>
+       
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-danger noborders">
+   Polia vyznačené na červeno sú povinné
+  </div>
+        <div class="form-group has-error">
+            <label>Meno:</label><input type="text" name="publishername" id="publishername" class="form-control" placeholder="Meno" /><br>
+            </div>
+            <label>Krajina:</label><input type="text" name="publishercountry" id="publishercountry" class="form-control" placeholder="Krajina" /><br>
+           
+           
+       
+       <button id="addpublisherconfirm" type="button" class="addpublisher btn btn-success">Pridaj</button>
+ 
+   </div>
+ </div>
+</div>
+</div>
+
+<div id="editPublisherModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h2 class="modal-title" id="myModalLabel">Uprav autora </h2>
+       
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-danger noborders">
+   Polia vyznačené na červeno sú povinné
+  </div>
+        <div class="form-group has-error">
+           <input style="visibility:hidden" type="text" name="editpublisherID" id="editpublisherID" value="" readonly>
+            <label>Meno:</label><input type="text" name="edit_publishername" id="edit_publishername" class="form-control" placeholder="Meno" /><br>
+            </div>
+            <label>Krajina:</label><input type="text" name="edit_publishercountry" id="edit_publishercountry" class="form-control" placeholder="Krajina" /><br>
+           
+           
+       
+       <button id="editpublisherconfirm" type="button" class="editpublisher btn btn-success">Uprav</button>
+ 
+   </div>
+ </div>
+</div>
+</div>
+
+<script>
+var publishertable;
+
+var tableready = function() {
+
+
+
+ publishertable= $('#publishers').DataTable({
+  'order': [2, 'desc'],
+  'serverSide': false,
+  'stateSave' :true,
+  'dom': 'lfr<"pull-right"B>tip',
+  'buttons': [
+  {"extend" : 'copyHtml5',"text":"Copy","className": 'btn btn-default btn-xs'},
+  {"extend" : 'excelHtml5',"text": "XLS","className": 'btn btn-default btn-xs'},
+  {"extend" : 'csvHtml5',"text": "CSV","className": 'btn btn-default btn-xs'},
+
+  {
+    text: 'TXT',
+    extend: 'csvHtml5',
+    fieldSeparator: '\t',
+    extension: '.txt',
+    "className": 'btn btn-default btn-xs'
+  },
+  {"extend" : 'pdfHtml5',"text": "PDF","className": 'btn btn-default btn-xs'},
+
+  ],
+  'language': {
+        'url': '/datatables_slovak.json'
+      },
+  'lengthMenu': [
+  [10, 50,100, -1],
+  [10, 50,100, "All"]
+  ]
+
+});
+
+ $('.edit_publisher_table_btn').on('click',function(event){
+  //$publisher_id=event.target.id;
+  $("#editpublisherID").val(event.target.id);
+  $row = $(event.target).closest('tr');
+  $("#edit_publishername").val($("td:eq(0)",$row).text());
+  $("#edit_publishercountry").val($("td:eq(1)",$row).text())
+
+
+
+
+ });
+
+
+$('.editpublisher').on('click',function(event){
+          //console.log(event.target.id);
+          
+          $publisher_id = $("#editpublisherID").val();
+          $name = $('#edit_publishername').val();
+          $country = $('#edit_publishercountry').val();
+         
+
+              $.ajax({
+            type: "POST",
+            url: "/modal_edit_publisher",
+             data: {
+              publisherID: $publisher_id,
+              name: $name,
+              country: $country},
+         
+
+            success:function(data){
+              if (data.status == "ok")
+              {
+                alert("Vydavateľ bol upravený" );
+                location.reload();
+              }
+              else { alert("Error");}
+
+
+            }
+          });
+          
+
+
+
+        });
+
+$('.addpublisher').on('click',function(event){
+          //console.log(event.target.id);
+          
+          $name = $('#publishername').val();
+          $country = $('#publishercountry').val();
+                  
+
+              $.ajax({
+            type: "POST",
+            url: "/modal_create_publisher",
+            data: {
+              name: $name,
+              country: $country,
+             },
+
+            success:function(data){
+              if (data.status == "ok")
+              {
+                alert("Vydavateľ bol vytvorený" );
+                location.reload();
+              }
+              else { alert(data.status);}
+
+
+            }
+          });
+          
+
+
+
+        });
+
+
+};
+$(".publishers.index").ready(tableready);
+
+
+document.addEventListener('turbolinks:before-cache', function() {
+ if ($('#publishers_wrapper').length ==1) {publishertable.destroy() ;} 
+
+});
+
+
+$(".publishers.index").on('turbolinks:load', tableready); 
+</script>

@@ -1,0 +1,41 @@
+ <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav metismenu" id="side-menu">
+                    <li class="nav-header">
+                        <div class="dropdown profile-element"> 
+                          
+                          
+                         
+                          <span>
+                          <img class="center img-responsive img-circle" src="<%= asset_path( 'user-avatar.png' ) %>"  alt="profile_img">
+                            
+                            
+                             </span>
+                            
+                            <span class="clear"> <span class="block m-t-xs"> <center><strong class="font-bold">
+                               
+                                 <h4 ><%= current_user.email %></h4>
+                                
+                                 
+                             </strong></center>
+                           
+                        </div>
+                      </li>
+                    
+                            <li><%= link_to "Prehľad", root_path%></li>
+                            <li><%= link_to "Knihy", books_path%></li>
+                            <li><%= link_to "Autori", authors_path%></li>
+                            <li><%= link_to "Vydavateľstvá", publishers_path%></li>
+                            <li><%= link_to "Užívatelia", users_path%></li>
+                                   
+                            
+                            
+              
+
+                       
+                    
+                   
+                </ul>
+
+            </div>
+        </nav>

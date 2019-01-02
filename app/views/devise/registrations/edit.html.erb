@@ -1,0 +1,64 @@
+
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>Zmeň heslo</h2>
+    <ol class="breadcrumb">
+      <li>
+        <%= link_to 'Home', root_path %>
+      </li>
+
+      <li class="active">
+        <strong>Zmeň heslo</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-lg-2">
+
+  </div>
+</div>
+
+<div class="row m-b-lg m-t-lg">
+
+  <div class="col-md-6 col-md-offset-3">
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :patch }) do |f| %>
+  <%= devise_error_messages! %>
+
+  <div class="form-group">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true,:class=>"form-control" %>
+  </div>
+
+  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+    <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label "Heslo" %> <br />
+    <%= f.password_field :password, autocomplete: "off",:class=>"form-control" %>
+    <% if @minimum_password_length %>
+      <br />
+      <em><%= @minimum_password_length %> characters minimum</em>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label "Potvrď heslo" %><br />
+    <%= f.password_field :password_confirmation, autocomplete: "off",:class=>"form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label "Aktuálne heslo" %> <i>(Pre potvrdenie zmien je nutné aktuálne heslo)</i><br />
+    <%= f.password_field :current_password, autocomplete: "off",:class=>"form-control" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Zmeň", :class=> 'btn btn-success ' %>
+    
+  
+  </div>
+<% end %>
+
+
+</div>
+</div>

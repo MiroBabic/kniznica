@@ -1,0 +1,209 @@
+<p id="notice"><%= render 'layouts/flash_message' %></p>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>Užívatelia</h2>
+    <ol class="breadcrumb">
+      <li>
+        <%= link_to 'Home', root_path %>
+      </li>
+      <li class="active">
+        <strong>Užívatelia</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-lg-2">
+
+  </div>
+</div>
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+   <div class="col-lg-12">
+     <div class="ibox float-e-margins">
+      <div class="ibox-content">
+        <button type="button" class="btn btn-success" id="add_contact_button" data-toggle="modal" data-target="#addUserModal">Pridaj nového užívateľa</button>
+        
+        <hr>
+        <div class="table-responsive">
+          <table class="table table-bordered" id="users" style="width:100%">
+            <thead>
+              <tr>
+                <th>Užívateľ</th>
+                <th>Email</th>
+                <th>Typ</th>
+                
+        
+                <th></th>
+               
+              </tr>
+            </thead>
+            <tbody>
+               <% @users.each do |user| %>
+      <tr>
+        <td><%= user.name %></td>
+        <td><%= user.email %></td>
+        <td><% if user.admin? %>Správca<% else %>Bežný užívateľ<% end %></td>
+      
+        
+        <td><%= link_to admin_destroy_user_path(user), method: :delete, data: { confirm: 'Naozaj ho chceš zmazať?' } do %><i class="fa fa-trash-o fa-2x" aria-hidden="true" ></i>  
+                <% end %></td>
+        
+      </tr>
+    <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<br>
+
+<div id="addUserModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h2 class="modal-title" id="myModalLabel">Vytvor užívateľa </h2>
+       
+      </div>
+      <div class="modal-body">
+        <div class="form-group has-error">
+         <label>Email:</label><input type="text" name="adduseremail" id="adduseremail" class="form-control" placeholder="Email" /><br>
+          <label>Meno:</label><input type="text" name="addusername" id="addusername" class="form-control" placeholder="Meno" /><br>
+        
+            <label>Heslo:</label><input type="password" name="password" id="password" class="form-control" /><br>
+            <label>Zopakuj heslo:</label><input type="password" name="password_confirm" id="password_confirm" class="form-control" /><br>
+
+           
+       </div>
+       <button id="adduserconfirm" type="button" class="addusr btn btn-success">Vytvor</button>
+ 
+   </div>
+ </div>
+</div>
+</div>
+
+
+
+
+
+<script>
+var userstable;
+
+var tableready = function() {
+
+
+
+ userstable= $('#users').DataTable({
+  'order': [2, 'desc'],
+  'serverSide': false,
+  'stateSave' :true,
+  'dom': 'lfr<"pull-right"B>tip',
+  'buttons': [
+  {"extend" : 'copyHtml5',"text":"Copy","className": 'btn btn-default btn-xs'},
+  {"extend" : 'excelHtml5',"text": "XLS","className": 'btn btn-default btn-xs'},
+  {"extend" : 'csvHtml5',"text": "CSV","className": 'btn btn-default btn-xs'},
+
+  {
+    text: 'TXT',
+    extend: 'csvHtml5',
+    fieldSeparator: '\t',
+    extension: '.txt',
+    "className": 'btn btn-default btn-xs'
+  },
+  {"extend" : 'pdfHtml5',"text": "PDF","className": 'btn btn-default btn-xs'},
+
+  ],
+  'language': {
+        'url': '/datatables_slovak.json'
+      },
+  'lengthMenu': [
+  [10, 50,100, -1],
+  [10, 50,100, "All"]
+  ]
+
+});
+
+
+$('.editusr').on('click',function(event){
+          //console.log(event.target.id);
+          
+          $user_id = event.target.id;
+          $user_name = $('#username'+$user_id).val();
+          $user_type = $('#usertype'+$user_id).val();
+
+              $.ajax({
+            type: "POST",
+            url: "/modal_edit_user",
+            data: {user_id: $user_id, user_type: $user_type, user_name: $user_name},
+
+            success:function(data){
+              if (data.status == "ok")
+              {
+                alert("Užívateľ bol upravený" );
+                location.reload();
+              }
+              else { alert("Error");}
+
+
+            }
+          });
+          
+
+
+
+        });
+
+$('.addusr').on('click',function(event){
+          //console.log(event.target.id);
+          
+          $user_email = $('#adduseremail').val();
+          $user_name = $('#addusername').val();
+          $user_type = $('#addusertype').val();
+          $password = $('#password').val();
+          $password_confirm = $('#password_confirm').val();
+
+              $.ajax({
+            type: "POST",
+            url: "/modal_create_user",
+            data: {
+              user_type: $user_type,
+              user_name: $user_name,
+              user_email: $user_email,
+              password: $password,
+              password_confirm: $password_confirm},
+
+            success:function(data){
+              if (data.status == "ok")
+              {
+                alert("Užívateľ bol vytvorený" );
+                location.reload();
+              }
+              else { alert(data.status);}
+
+
+            }
+          });
+          
+
+
+
+        });
+
+
+};
+$(".static_pages.users").ready(tableready);
+
+
+document.addEventListener('turbolinks:before-cache', function() {
+ if ($('#users_wrapper').length ==1) {userstable.destroy() ;} 
+
+});
+
+
+$(".static_pages.users").on('turbolinks:load', tableready); 
+</script>

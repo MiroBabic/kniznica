@@ -1,0 +1,34 @@
+
+.nav-header {
+	background-image: none !important;
+	background-color: #2F4050 !important; 
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+
+.modal-dialog-upload{
+    height: auto;
+    min-height: 500px;   
+}
+
+.enlarge-down-80 {
+  padding-bottom: 80px !important;
+}
+
+.vip_text {
+  color: #f7941e !important;
+}
+
+
+@media (min-width: 992px) {
+  .modal-xl {
+    width: 90%;
+   max-width:1200px;
+  }
+}
+

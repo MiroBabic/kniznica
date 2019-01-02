@@ -1,0 +1,59 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @wishlist.name %>
+</p>
+
+<p>
+  <strong>Author:</strong>
+  <%= @wishlist.author %>
+</p>
+
+<p>
+  <strong>Publisher:</strong>
+  <%= @wishlist.publisher %>
+</p>
+
+<p>
+  <strong>Publish year:</strong>
+  <%= @wishlist.publish_year %>
+</p>
+
+<p>
+  <strong>Martinus url:</strong>
+  <%= @wishlist.martinus_url %>
+</p>
+
+<p>
+  <strong>Image url:</strong>
+  <%= @wishlist.image_url %>
+</p>
+
+<p>
+  <strong>Note:</strong>
+  <%= @wishlist.note %>
+</p>
+
+<p>
+  <strong>Pages:</strong>
+  <%= @wishlist.pages %>
+</p>
+
+<p>
+  <strong>Price:</strong>
+  <%= @wishlist.price %>
+</p>
+
+<p>
+  <strong>Expected release:</strong>
+  <%= @wishlist.expected_release %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @wishlist.user_id %>
+</p>
+
+<%= link_to 'Edit', edit_wishlist_path(@wishlist) %> |
+<%= link_to 'Back', wishlists_path %>

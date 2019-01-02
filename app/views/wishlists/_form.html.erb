@@ -1,0 +1,72 @@
+<%= form_with(model: wishlist, local: true) do |form| %>
+  <% if wishlist.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(wishlist.errors.count, "error") %> prohibited this wishlist from being saved:</h2>
+
+      <ul>
+      <% wishlist.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :author_id %>
+    <%= form.text_field :author_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :publisher_id %>
+    <%= form.text_field :publisher_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :publish_year %>
+    <%= form.number_field :publish_year %>
+  </div>
+
+  <div class="field">
+    <%= form.label :martinus_url %>
+    <%= form.text_field :martinus_url %>
+  </div>
+
+  <div class="field">
+    <%= form.label :image_url %>
+    <%= form.text_field :image_url %>
+  </div>
+
+  <div class="field">
+    <%= form.label :note %>
+    <%= form.text_field :note %>
+  </div>
+
+  <div class="field">
+    <%= form.label :pages %>
+    <%= form.number_field :pages %>
+  </div>
+
+  <div class="field">
+    <%= form.label :price %>
+    <%= form.text_field :price %>
+  </div>
+
+  <div class="field">
+    <%= form.label :expected_release %>
+    <%= form.text_field :expected_release %>
+  </div>
+
+  <div class="field">
+    <%= form.label :user_id_id %>
+    <%= form.text_field :user_id_id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

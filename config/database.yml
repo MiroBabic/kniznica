@@ -1,0 +1,35 @@
+# SQLite version 3.x
+#   gem install sqlite3
+#
+#   Ensure the SQLite 3 gem is defined in your Gemfile
+#   gem 'sqlite3'
+#
+development:
+  adapter: postgresql
+  host: localhost
+  encoding: utf8
+  database: kniznica_dev
+  pool: 5
+  username: <%= ENV['PGUSER']%>
+  password: <%= ENV['PGPASS']%>
+ 
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+#test: &TEST
+#  adapter: postgresql
+#  host: localhost
+#  encoding: utf8
+#  database: solera_test
+#  pool: 5
+#  username: meno
+#  password: heslo
+
+production:
+  adapter: postgresql
+  host: localhost
+  encoding: utf8
+  database: kniznica_production
+  pool: 5
+  username: <%= ENV['PGUSER']%>
+  password: <%= ENV['PGPASS']%>

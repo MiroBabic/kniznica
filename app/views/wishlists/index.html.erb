@@ -1,0 +1,47 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Wishlists</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Author</th>
+      <th>Publisher</th>
+      <th>Publish year</th>
+      <th>Martinus url</th>
+      <th>Image url</th>
+      <th>Note</th>
+      <th>Pages</th>
+      <th>Price</th>
+      <th>Expected release</th>
+      <th>User</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @wishlists.each do |wishlist| %>
+      <tr>
+        <td><%= wishlist.name %></td>
+        <td><%= wishlist.author %></td>
+        <td><%= wishlist.publisher %></td>
+        <td><%= wishlist.publish_year %></td>
+        <td><%= wishlist.martinus_url %></td>
+        <td><%= wishlist.image_url %></td>
+        <td><%= wishlist.note %></td>
+        <td><%= wishlist.pages %></td>
+        <td><%= wishlist.price %></td>
+        <td><%= wishlist.expected_release %></td>
+        <td><%= wishlist.user_id %></td>
+        <td><%= link_to 'Show', wishlist %></td>
+        <td><%= link_to 'Edit', edit_wishlist_path(wishlist) %></td>
+        <td><%= link_to 'Destroy', wishlist, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Wishlist', new_wishlist_path %>
