@@ -30,5 +30,14 @@ Rails.application.routes.draw do
  post '/modal_create_publisher' => 'publishers#modal_create_publisher', :as=> 'modal_create_publisher'
  post '/modal_edit_publisher' => 'publishers#modal_edit_publisher', :as=> 'modal_edit_publisher'
 
+ #books
+ post '/modal_create_book' => 'books#modal_create_book', :as=> 'modal_create_book'
+ post '/modal_edit_book' => 'books#modal_edit_book', :as=> 'modal_edit_book'
+
+#wishlists
+post '/modal_create_wishlist' => 'wishlists#modal_create_wishlist', :as=> 'modal_create_wishlist'
+post '/modal_edit_wishlist' => 'wishlists#modal_edit_wishlist', :as=> 'modal_edit_wishlist'
+post '/update_from_martinus' => 'wishlists#update_from_martinus', :as=> 'update_from_martinus'
+
   root 'static_pages#home'
 end

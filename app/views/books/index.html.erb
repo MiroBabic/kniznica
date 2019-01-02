@@ -111,12 +111,12 @@
   </div>
         <div class="form-group has-error">
            <input style="visibility:hidden" type="text" name="editbookID" id="editbookID" value="" readonly>
-             <label>Názov:</label><input type="text" name="bookname" id="bookname" class="form-control" placeholder="Názov" /><br>
+             <label>Názov:</label><input type="text" name="edit_bookname" id="edit_bookname" class="form-control" placeholder="Názov" /><br>
             </div>
-             <label>Autor:</label><%= select_tag 'author', options_from_collection_for_select(@authors, 'id', 'name'), class: 'form-control', id: 'author',prompt: "--vyber autora--" %><br>
-             <label>Vydavateľ:</label><%= select_tag 'publisher', options_from_collection_for_select(@publishers, 'id', 'name'), class: 'form-control', id: 'publisher',prompt: "--vyber vydavateľa--" %><br>
-            <label>Rok vydania:</label><input type="number" name="publish_year" id="publish_year" class="form-control" placeholder="Zadaj rok" /><br>
-           <label>Poznámka:</label><input type="text" name="note" id="note" class="form-control" placeholder="Názov" /><br>
+             <label>Autor:</label><%= select_tag 'edit_author', options_from_collection_for_select(@authors, 'id', 'name'), class: 'form-control', id: 'edit_author',prompt: "--vyber autora--" %><br>
+             <label>Vydavateľ:</label><%= select_tag 'edit_publisher', options_from_collection_for_select(@publishers, 'id', 'name'), class: 'form-control', id: 'edit_publisher',prompt: "--vyber vydavateľa--" %><br>
+            <label>Rok vydania:</label><input type="number" name="edit_publish_year" id="edit_publish_year" class="form-control" placeholder="Zadaj rok" /><br>
+           <label>Poznámka:</label><input type="text" name="edit_note" id="edit_note" class="form-control" placeholder="Názov" /><br>
            
            
            
@@ -167,12 +167,29 @@ var tableready = function() {
 
  $('.edit_book_table_btn').on('click',function(event){
   //$book_id=event.target.id;
-  $("#editbookID").val(event.target.id);
-  $row = $(event.target).closest('tr');
-  $("#edit_bookname").val($("td:eq(0)",$row).text());
-  $("#edit_bookcountry").val($("td:eq(1)",$row).text())
+  $book_id = event.target.id;
+$("#editbookID").val($book_id);
+   $.ajax({
+            type: "GET",
+            url: "/books/"+$book_id+".json",
+           
+            success:function(data){
+             
+             // console.log(data);
+                                 
+             $("#edit_bookname").val(data.name); 
+             if (data.author !== null) { $("#edit_author").val(data.author.id); }
+             if (data.publisher !== null) { $("#edit_publisher").val(data.publisher.id); }
+             $("#edit_publish_year").val(data.publish_year); 
+             $("#edit_note").val(data.note); 
+              
 
 
+            },
+            error: function(msg){
+              alert(msg);
+            }
+          });
 
 
  });
@@ -183,7 +200,10 @@ $('.editbook').on('click',function(event){
           
           $book_id = $("#editbookID").val();
           $name = $('#edit_bookname').val();
-          $country = $('#edit_bookcountry').val();
+          $author = $('#edit_author').val();
+          $publisher = $('#edit_publisher').val();
+          $publish_year = $('#edit_publish_year').val();
+          $note = $('#edit_note').val();
          
 
               $.ajax({
@@ -192,13 +212,18 @@ $('.editbook').on('click',function(event){
              data: {
               bookID: $book_id,
               name: $name,
-              country: $country},
+              author: $author,
+              publisher: $publisher,
+              publish_year: $publish_year,
+              note: $note
+
+            },
          
 
             success:function(data){
               if (data.status == "ok")
               {
-                alert("Vydavateľ bol upravený" );
+                alert("Kniha bola upravená" );
                 location.reload();
               }
               else { alert("Error");}
@@ -216,7 +241,10 @@ $('.addbook').on('click',function(event){
           //console.log(event.target.id);
           
           $name = $('#bookname').val();
-          $country = $('#bookcountry').val();
+          $author = $('#author').val();
+          $publisher = $('#publisher').val();
+          $publish_year = $('#publish_year').val();
+          $note = $('#note').val();
                   
 
               $.ajax({
@@ -224,13 +252,17 @@ $('.addbook').on('click',function(event){
             url: "/modal_create_book",
             data: {
               name: $name,
-              country: $country,
+              author: $author,
+              publisher: $publisher,
+              publish_year: $publish_year,
+              note: $note
+
              },
 
             success:function(data){
               if (data.status == "ok")
               {
-                alert("Vydavateľ bol vytvorený" );
+                alert("Kniha bola vytvorená" );
                 location.reload();
               }
               else { alert(data.status);}

@@ -23,6 +23,66 @@ class BooksController < ApplicationController
   def edit
   end
 
+  def modal_create_book
+    begin
+
+     name=params[:name]
+     author=params[:author]
+     publisher = params[:publisher]
+     publish_year = params[:publish_year]
+     note = params[:note]
+     
+    b=Book.new(:name=>name, :author_id=>author, :publisher_id=>publisher, :note=>note, :publish_year=>publish_year, :user_id=>current_user.id)
+    
+    if (b.save)
+
+      respond_to do |format|
+        format.json { render :json => {"status":"ok"}  }
+      end
+    else
+      respond_to do |format|
+        format.json { render :json => {"status":"nepodarilo sa vložiť záznam"}  }
+      end
+    end
+
+
+
+    rescue => error
+      redirect_to books_path, alert: error.message
+    end
+  end
+
+  def modal_edit_book
+    begin
+
+      @book = Book.find(params[:bookID])
+
+      @book.name=params[:name]
+      @book.author_id=params[:author]
+      @book.publisher_id = params[:publisher]
+      @book.publish_year = params[:publish_year]
+      @book.note = params[:note]
+     
+    
+    
+    if (@book.save)
+
+      respond_to do |format|
+        format.json { render :json => {"status":"ok"}  }
+      end
+    else
+      respond_to do |format|
+        format.json { render :json => {"status":"nepodarilo sa vložiť záznam"}  }
+      end
+    end
+
+
+
+  rescue => error
+    redirect_to books_path, alert: error.message
+  end
+  end
+
   # POST /books
   # POST /books.json
   def create
@@ -58,7 +118,7 @@ class BooksController < ApplicationController
   def destroy
     @book.destroy
     respond_to do |format|
-      format.html { redirect_to books_url, notice: 'Book was successfully destroyed.' }
+      format.html { redirect_to books_url, notice: 'Kniha bola úspešne zmazaná.' }
       format.json { head :no_content }
     end
   end

@@ -5,6 +5,8 @@ class WishlistsController < ApplicationController
   # GET /wishlists.json
   def index
     @wishlists = Wishlist.all
+    @authors = Author.all.order(:name)
+    @publishers = Publisher.all.order(:name)
   end
 
   # GET /wishlists/1
@@ -21,6 +23,133 @@ class WishlistsController < ApplicationController
   def edit
   end
 
+def modal_create_wishlist
+    begin
+
+     name=params[:name]
+     author=params[:author]
+     publisher = params[:publisher]
+     publish_year = params[:publish_year]
+     note = params[:note]
+     martinus_url = params[:martinus_url]
+     
+    w=Wishlist.new(:name=>name, :author_id=>author, :publisher_id=>publisher, :note=>note, :publish_year=>publish_year, :user_id=>current_user.id, :martinus_url=>martinus_url)
+    
+    if (w.save)
+
+      respond_to do |format|
+        format.json { render :json => {"status":"ok"}  }
+      end
+    else
+      respond_to do |format|
+        format.json { render :json => {"status":"nepodarilo sa vložiť záznam"}  }
+      end
+    end
+
+
+
+    rescue => error
+      redirect_to wishlists_path, alert: error.message
+    end
+  end
+
+
+def modal_edit_wishlist
+    begin
+
+      @wishlist = Wishlist.find(params[:wishlistID])
+
+      @wishlist.name=params[:name]
+      @wishlist.author_id=params[:author]
+      @wishlist.publisher_id = params[:publisher]
+      @wishlist.publish_year = params[:publish_year]
+      @wishlist.note = params[:note]
+      @wishlist.martinus_url = params[:martinus_url]
+     
+    
+    
+    if (@wishlist.save)
+
+      respond_to do |format|
+        format.json { render :json => {"status":"ok"}  }
+      end
+    else
+      respond_to do |format|
+        format.json { render :json => {"status":"nepodarilo sa vložiť záznam"}  }
+      end
+    end
+
+
+
+  rescue => error
+    redirect_to wishlists_path, alert: error.message
+  end
+  end
+
+def update_from_martinus
+  require 'nokogiri'
+  require 'openssl'
+  require 'open-uri'
+  require 'json'
+  begin
+      @wishlists = Wishlist.all
+
+      @wishlists.each do |wishlist|
+        page = Nokogiri::XML(open(wishlist.martinus_url))
+
+        book_data = page.xpath('//script[@type="application/ld+json"][1]').text
+        preorder_data = page.xpath('//div[@class="card__content"]/p[@class="mb-small text-color-grey-dark"]').text
+
+        json_book_data = JSON.parse(book_data)
+
+        publisher_name = ''
+        json_book_data["publisher"].each do |publisher|
+          publisher_name = publisher["name"]
+        end
+
+        author_name = ''
+
+        json_book_data["author"].each do |author|
+          author_name = author["name"]
+        end
+
+        price = json_book_data["offers"]["price"]
+        currency = json_book_data["offers"]["priceCurrency"]
+        final_price = (price.to_s) +' '+(currency.to_s)
+        
+
+        @author = Author.where(:name=>author_name.strip).first_or_create
+        @publisher = Publisher.where(:name=>publisher_name.strip).first_or_create
+
+        if preorder_data.present?
+          expected_release = preorder_data
+        else
+          expected_release = 'Už vydané alebo bude čoskoro'
+        end
+
+
+          wishlist.name = json_book_data["name"]
+          wishlist.pages = json_book_data["numberOfPages"]
+          wishlist.image_url = json_book_data["thumbnailUrl"]
+          wishlist.author_id = @author.id
+          wishlist.publisher_id = @publisher.id
+          wishlist.expected_release = expected_release
+          wishlist.price = final_price
+          wishlist.save
+
+      
+      end
+
+       respond_to do |format|
+        format.json { render :json => {"status":"ok"}  }
+      end      
+      
+
+    rescue => error
+      redirect_to wishlists_path, :alert=>error.message
+#      puts error.message
+    end
+end
   # POST /wishlists
   # POST /wishlists.json
   def create
