@@ -57,6 +57,7 @@
       <th>Vložil</th>
       <th></th>
       <th></th>
+      <th></th>
     </tr>
   </thead>
 
@@ -74,6 +75,7 @@
         <td><%= wishlist.price %></td>
         <td><%= wishlist.expected_release %></td>
         <td><%= wishlist.user.name if wishlist.user.present? %></td>
+        <td><a class="confirm_wishlist_table_btn"><i id="<%=wishlist.id%>" class="fa fa-check fa-2x" aria-hidden="true"></i></a></td>
           <td><a class="edit_wishlist_table_btn" data-toggle="modal" data-target="#editWishlistModal"><i id="<%=wishlist.id%>" class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></a></td>
         <td><%= link_to  wishlist, method: :delete, data: { confirm: 'Naozaj ju chceš zmazať?' } do %><i class="fa fa-trash-o fa-2x" aria-hidden="true" ></i>  
                 <% end %></td>
@@ -157,6 +159,36 @@
 var wishlisttable;
 
 var tableready = function() {
+
+    $('.confirm_wishlist_table_btn').on('click',function(event){
+          //console.log(event.target.id);
+          $wishlist_id = event.target.id;
+        if (!confirm('Chceš túto knihu presunúť z wishlistu do knižnice?')) return false;
+          $.ajax({
+            type: "POST",
+            url: "/move_from_wishlist",
+            data: {
+              wishlist_id: $wishlist_id
+
+            },
+
+            success:function(data){
+              if (data.status == "ok")
+              {
+                alert("Hotovo" );
+                location.reload();
+                
+              }
+              else { alert(data.status);}
+
+
+            }
+          });
+          
+
+
+
+        });
 
 
 

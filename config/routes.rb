@@ -38,6 +38,7 @@ Rails.application.routes.draw do
 post '/modal_create_wishlist' => 'wishlists#modal_create_wishlist', :as=> 'modal_create_wishlist'
 post '/modal_edit_wishlist' => 'wishlists#modal_edit_wishlist', :as=> 'modal_edit_wishlist'
 post '/update_from_martinus' => 'wishlists#update_from_martinus', :as=> 'update_from_martinus'
+post '/move_from_wishlist' => 'wishlists#move_from_wishlist', :as=> 'move_from_wishlist'
 
   root 'static_pages#home'
 end

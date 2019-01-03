@@ -34,6 +34,8 @@
 //= require fullcalendar/fullcalendar.min.js
 //= require fullcalendar/sk.js
 
+//= require rateYo/jquery.rateyo.min.js
+
 //= require_tree .
 
 

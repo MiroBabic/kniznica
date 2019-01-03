@@ -1,3 +1,7 @@
+<% content_for(:head_attributes) do %>
+<meta name="turbolinks-cache-control" content="no-cache">
+  <% end %>
+
 <p id="notice"><%= render 'layouts/flash_message' %></p>
 
 <div class="row wrapper border-bottom white-bg page-heading">
@@ -49,7 +53,7 @@
         <td><%= book.author.name if book.author.present? %></td>
         <td><%= book.publisher.name if book.publisher.present? %></td>
         <td><%= book.publish_year %></td>
-        <td><%= book.rating %></td>
+        <td><div class="rateYo"><%= book.rating %></div></td>
         <td><%= book.user.name %></td>
         <td><%= book.note %></td>
           <td><a class="edit_book_table_btn" data-toggle="modal" data-target="#editBookModal"><i id="<%=book.id%>" class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></a></td>
@@ -88,6 +92,14 @@
              <label>Vydavateľ:</label><%= select_tag 'publisher', options_from_collection_for_select(@publishers, 'id', 'name'), class: 'form-control', id: 'publisher',prompt: "--vyber vydavateľa--" %><br>
             <label>Rok vydania:</label><input type="number" name="publish_year" id="publish_year" class="form-control" placeholder="Zadaj rok" /><br>
            <label>Poznámka:</label><input type="text" name="note" id="note" class="form-control" placeholder="Názov" /><br>
+           <div class="row">
+           <label>Hodnotenie</label>
+            <div class="col-xs-12" id="rating_rateYo">
+        </div>
+        <div class="col-xs-12" style="visibility:hidden" id="rating_div">
+           <%= select_tag(:rating, options_for_select([['NotDefined', 0],['1', 1], ['2', 2], ['3', 3 ], ['4', 4], ['5', 5]]),{:class=>"form-control"}) %>
+        </div>
+      </div>
            
        
        <button id="addbookconfirm" type="button" class="addbook btn btn-success">Pridaj</button>
@@ -117,7 +129,14 @@
              <label>Vydavateľ:</label><%= select_tag 'edit_publisher', options_from_collection_for_select(@publishers, 'id', 'name'), class: 'form-control', id: 'edit_publisher',prompt: "--vyber vydavateľa--" %><br>
             <label>Rok vydania:</label><input type="number" name="edit_publish_year" id="edit_publish_year" class="form-control" placeholder="Zadaj rok" /><br>
            <label>Poznámka:</label><input type="text" name="edit_note" id="edit_note" class="form-control" placeholder="Názov" /><br>
-           
+            <div class="row">
+           <label>Hodnotenie</label>
+            <div class="col-xs-12" id="edit_rating_rateYo">
+        </div>
+        <div class="col-xs-12" style="visibility:hidden" id="edit_rating_div">
+           <%= select_tag(:edit_rating, options_for_select([['NotDefined', 0],['1', 1], ['2', 2], ['3', 3 ], ['4', 4], ['5', 5]]),{:class=>"form-control"}) %>
+        </div>
+      </div>
            
            
        
@@ -131,8 +150,26 @@
 <script>
 var booktable;
 
+
+
 var tableready = function() {
 
+$('#editBookModal').on('shown.bs.modal', function (e) {
+  
+  if (typeof($myrate) !== 'undefined') {$myrate.rateYo('destroy')}
+
+})
+
+
+    $("#rating_rateYo").rateYo({
+    rating: 0,
+    fullStar: true
+  })
+     .on("rateyo.set", function (e, data) { 
+      //console.log("rateyo.set"); alert(data.rating);
+      $("#rating_div :selected").removeAttr("selected");
+      $('#rating_div option[value='+data.rating+']').attr('selected','selected');
+       })
 
 
  booktable= $('#books').DataTable({
@@ -161,14 +198,46 @@ var tableready = function() {
   'lengthMenu': [
   [10, 50,100, -1],
   [10, 50,100, "All"]
-  ]
+  ] ,
+   drawCallback: function() 
+         {
+             $(".rateYo").each(function (e) {
+             
+               var $custrating = $(this).text();
+             
+              if ($custrating === undefined || $custrating === null || $custrating === 'null' || $custrating === '') {$custrating=0;}
+              
+            $(this).rateYo({
+                                  
+                rating: $custrating,
+                starWidth: "20px",
+                numStars: 5,
+                readOnly: true,
+                fullStar: true
+            });
+});
+            }
+    
 
 });
 
  $('.edit_book_table_btn').on('click',function(event){
+  
+  var $myrate = $("#edit_rating_rateYo").rateYo({
+              rating: 0,
+              fullStar: true
+            })
+               .on("rateyo.set", function (e, data) { 
+                //console.log("rateyo.set"); alert(data.rating);
+                $("#edit_rating_div :selected").removeAttr("selected");
+                $('#edit_rating_div option[value='+data.rating+']').attr('selected','selected');
+                 })
+
   //$book_id=event.target.id;
   $book_id = event.target.id;
 $("#editbookID").val($book_id);
+
+  var $editrating = 0;
    $.ajax({
             type: "GET",
             url: "/books/"+$book_id+".json",
@@ -182,14 +251,22 @@ $("#editbookID").val($book_id);
              if (data.publisher !== null) { $("#edit_publisher").val(data.publisher.id); }
              $("#edit_publish_year").val(data.publish_year); 
              $("#edit_note").val(data.note); 
-              
 
+             $("#edit_rating_div :selected").removeAttr("selected");
+            $('#edit_rating_div option[value='+data.rating+']').attr('selected','selected');
 
+            var $editrating = data.rating;
+             
+            if ($editrating === undefined || $editrating === null || $editrating === 'null' || $editrating === '') {$editrating=0;}
+
+            $myrate.rateYo("option", "rating", $editrating);
+           
             },
             error: function(msg){
               alert(msg);
             }
           });
+
 
 
  });
@@ -204,6 +281,8 @@ $('.editbook').on('click',function(event){
           $publisher = $('#edit_publisher').val();
           $publish_year = $('#edit_publish_year').val();
           $note = $('#edit_note').val();
+          $rating = $('#edit_rating').val(); 
+
          
 
               $.ajax({
@@ -215,7 +294,8 @@ $('.editbook').on('click',function(event){
               author: $author,
               publisher: $publisher,
               publish_year: $publish_year,
-              note: $note
+              note: $note,
+              rating: $rating
 
             },
          
@@ -245,7 +325,7 @@ $('.addbook').on('click',function(event){
           $publisher = $('#publisher').val();
           $publish_year = $('#publish_year').val();
           $note = $('#note').val();
-                  
+          $rating = $('#rating').val();                  
 
               $.ajax({
             type: "POST",
@@ -255,7 +335,8 @@ $('.addbook').on('click',function(event){
               author: $author,
               publisher: $publisher,
               publish_year: $publish_year,
-              note: $note
+              note: $note,
+              rating: $rating
 
              },
 
@@ -288,4 +369,5 @@ document.addEventListener('turbolinks:before-cache', function() {
 
 
 $(".books.index").on('turbolinks:load', tableready); 
+
 </script>

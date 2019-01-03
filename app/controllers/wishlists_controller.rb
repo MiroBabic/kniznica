@@ -150,6 +150,32 @@ def update_from_martinus
 #      puts error.message
     end
 end
+
+def move_from_wishlist
+  begin
+    @wishlist = Wishlist.find(params[:wishlist_id])
+
+    @book = Book.new(:name=>@wishlist.name,:author_id=>@wishlist.author_id, :publisher_id=>@wishlist.publisher_id,:note=>@wishlist.note, :publish_year=>@wishlist.publish_year,:user_id=>@wishlist.user_id)
+
+    if (@book.save)
+      @wishlist.destroy
+
+      respond_to do |format|
+        format.json { render :json => {"status":"ok"}  }
+      end
+    else
+      respond_to do |format|
+        format.json { render :json => {"status":"nepodarilo sa presunúť záznam"}  }
+      end
+    end
+
+
+
+  rescue=>error
+    redirect_to wishlists_path, :alert=>error.message
+  end
+end
+
   # POST /wishlists
   # POST /wishlists.json
   def create

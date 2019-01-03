@@ -31,8 +31,9 @@ class BooksController < ApplicationController
      publisher = params[:publisher]
      publish_year = params[:publish_year]
      note = params[:note]
+     rating = params[:rating]
      
-    b=Book.new(:name=>name, :author_id=>author, :publisher_id=>publisher, :note=>note, :publish_year=>publish_year, :user_id=>current_user.id)
+    b=Book.new(:name=>name, :author_id=>author, :publisher_id=>publisher, :note=>note, :publish_year=>publish_year, :user_id=>current_user.id, :rating=>rating)
     
     if (b.save)
 
@@ -62,6 +63,7 @@ class BooksController < ApplicationController
       @book.publisher_id = params[:publisher]
       @book.publish_year = params[:publish_year]
       @book.note = params[:note]
+      @book.rating = params[:rating]
      
     
     
