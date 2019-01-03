@@ -91,4 +91,26 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  config.action_mailer.default_url_options = { host: 'kniznica.mirobabic.com'}
+  config.mailer_sender = '"Admin" <admin@mirobabic.com>'
+
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.perform_deliveries = true
+
+  config.action_mailer.delivery_method = :smtp
+
+config.action_mailer.smtp_settings = {
+address: 'smtp.websupport.sk',
+port: 25,
+domain: 'mirobabic.com',
+authentication: 'login',
+enable_starttls_auto: true,
+user_name: ENV['EMAIL'],
+password: ENV['PASSWORD']
+}
+
+config.action_dispatch.default_headers = {
+    'X-Frame-Options' => 'ALLOWALL'
+}
 end
