@@ -57,3 +57,12 @@
   padding-left: 0px !important;
   padding-right: 0px !important;
 }
+
+/* remove margin for mobiles ibox */
+
+@media (max-width: 992px) {
+  .margin35minus {
+    margin-left: -35px !important;
+    margin-right: -35px !important;
+  }
+}
