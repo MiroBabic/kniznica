@@ -44,17 +44,17 @@
           <table class="table table-bordered" id="wishlists" style="width:100%">
   <thead>
     <tr>
-      <th>Obrázok</th>
+      <th ></th>
       <th>Názov</th>
       <th>Autor</th>
       <th>Vydavateľ</th>
-      <th>Rok vydania</th>
-      <th>Martinus url</th>
-      <th>Poznámka</th>
-      <th>Počet strán</th>
-      <th>Cena</th>
-      <th>Očakávaný dátum vydania</th>
-      <th>Vložil</th>
+      <th class="hidden-sm">Rok vydania</th>
+      <th class="hidden-sm">Martinus url</th>
+      <th class="hidden-sm">Poznámka</th>
+      <th class="hidden-sm">Počet strán</th>
+      <th class="hidden-sm">Cena</th>
+      <th class="hidden-sm">Očakávaný dátum vydania</th>
+      <th class="hidden-sm">Vložil</th>
       <th></th>
       <th></th>
       <th></th>
@@ -68,13 +68,13 @@
         <td><%= wishlist.name %></td>
         <td><%= wishlist.author.name if wishlist.author.present? %></td>
         <td><%= wishlist.publisher.name if wishlist.publisher.present? %></td>
-        <td><%= wishlist.publish_year %></td>
-        <td><%= wishlist.martinus_url %></td>
-        <td><%= wishlist.note %></td>
-        <td><%= wishlist.pages %></td>
-        <td><%= wishlist.price %></td>
-        <td><%= wishlist.expected_release %></td>
-        <td><%= wishlist.user.name if wishlist.user.present? %></td>
+        <td class="hidden-sm"><%= wishlist.publish_year %></td>
+        <td class="hidden-sm"><%= wishlist.martinus_url %></td>
+        <td class="hidden-sm"><%= wishlist.note %></td>
+        <td class="hidden-sm"><%= wishlist.pages %></td>
+        <td class="hidden-sm"><%= wishlist.price %></td>
+        <td class="hidden-sm"><%= wishlist.expected_release %></td>
+        <td class="hidden-sm"><%= wishlist.user.name if wishlist.user.present? %></td>
         <td><a class="confirm_wishlist_table_btn"><i id="<%=wishlist.id%>" class="fa fa-check fa-2x" aria-hidden="true"></i></a></td>
           <td><a class="edit_wishlist_table_btn" data-toggle="modal" data-target="#editWishlistModal"><i id="<%=wishlist.id%>" class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></a></td>
         <td><%= link_to  wishlist, method: :delete, data: { confirm: 'Naozaj ju chceš zmazať?' } do %><i class="fa fa-trash-o fa-2x" aria-hidden="true" ></i>  

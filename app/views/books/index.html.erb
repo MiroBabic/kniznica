@@ -36,11 +36,11 @@
     <tr>
       <th>Názov</th>
       <th>Autor</th>
-      <th>Vydavateľ</th>
-      <th>Rok vydania</th>
+      <th class="hidden-sm">Vydavateľ</th>
+      <th class="hidden-sm">Rok vydania</th>
       <th>Hodnotenie</th>
       <th>Vložil</th>
-      <th>Poznámka</th>
+      <th class="hidden-sm">Poznámka</th>
       <th></th>
       <th></th>
     </tr>
@@ -51,11 +51,11 @@
       <tr>
         <td><%= book.name %></td>
         <td><%= book.author.name if book.author.present? %></td>
-        <td><%= book.publisher.name if book.publisher.present? %></td>
-        <td><%= book.publish_year %></td>
+        <td class="hidden-sm"><%= book.publisher.name if book.publisher.present? %></td>
+        <td class="hidden-sm"><%= book.publish_year %></td>
         <td><div class="rateYo"><%= book.rating %></div></td>
         <td><%= book.user.name %></td>
-        <td><%= book.note %></td>
+        <td class="hidden-sm"><%= book.note %></td>
           <td><a class="edit_book_table_btn" data-toggle="modal" data-target="#editBookModal"><i id="<%=book.id%>" class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></a></td>
         <td><%= link_to  book, method: :delete, data: { confirm: 'Naozaj ju chceš zmazať?' } do %><i class="fa fa-trash-o fa-2x" aria-hidden="true" ></i>  
                 <% end %></td>
