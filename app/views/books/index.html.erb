@@ -24,7 +24,7 @@
 
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="row">
-   <div class="col-lg-12">
+   <div class="col-lg-12 nopadding">
      <div class="ibox float-e-margins">
       <div class="ibox-content">
         <button type="button" class="btn btn-success" id="add_book_button" data-toggle="modal" data-target="#addBookModal">Pridaj novú knihu</button>
@@ -36,11 +36,11 @@
     <tr>
       <th>Názov</th>
       <th>Autor</th>
-      <th class="hidden-sm">Vydavateľ</th>
-      <th class="hidden-sm">Rok vydania</th>
+      <th class="hidden-sm hidden-xs">Vydavateľ</th>
+      <th class="hidden-sm hidden-xs">Rok vydania</th>
       <th>Hodnotenie</th>
       <th>Vložil</th>
-      <th class="hidden-sm">Poznámka</th>
+      <th class="hidden-sm hidden-xs">Poznámka</th>
       <th></th>
       <th></th>
     </tr>
@@ -51,11 +51,11 @@
       <tr>
         <td><%= book.name %></td>
         <td><%= book.author.name if book.author.present? %></td>
-        <td class="hidden-sm"><%= book.publisher.name if book.publisher.present? %></td>
-        <td class="hidden-sm"><%= book.publish_year %></td>
+        <td class="hidden-sm hidden-xs"><%= book.publisher.name if book.publisher.present? %></td>
+        <td class="hidden-sm hidden-xs"><%= book.publish_year %></td>
         <td><div class="rateYo"><%= book.rating %></div></td>
         <td><%= book.user.name %></td>
-        <td class="hidden-sm"><%= book.note %></td>
+        <td class="hidden-sm hidden-xs"><%= book.note %></td>
           <td><a class="edit_book_table_btn" data-toggle="modal" data-target="#editBookModal"><i id="<%=book.id%>" class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></a></td>
         <td><%= link_to  book, method: :delete, data: { confirm: 'Naozaj ju chceš zmazať?' } do %><i class="fa fa-trash-o fa-2x" aria-hidden="true" ></i>  
                 <% end %></td>

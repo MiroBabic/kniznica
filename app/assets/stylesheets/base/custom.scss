@@ -32,3 +32,28 @@
   }
 }
 
+
+/* ibox override*/
+.ibox-title {
+  border-style: none !important;
+}
+
+.ibox-content {
+  border-style: none !important;
+}
+
+
+.border-object {
+  border:1px solid #e7eaec;
+}
+
+.border-object-search {
+  border:1px solid #c0392b;
+}
+
+/* end ibox */
+
+.nopadding {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}

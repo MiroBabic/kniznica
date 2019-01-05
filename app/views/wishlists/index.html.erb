@@ -20,7 +20,7 @@
 
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="row">
-   <div class="col-lg-12">
+   <div class="col-lg-12 nopadding">
      <div class="ibox float-e-margins">
       <div class="ibox-content">
         <button type="button" class="btn btn-success" id="add_wishlist_button" data-toggle="modal" data-target="#addWishlistModal">Pridaj novú knihu do wishlistu</button> 
@@ -48,13 +48,13 @@
       <th>Názov</th>
       <th>Autor</th>
       <th>Vydavateľ</th>
-      <th class="hidden-sm">Rok vydania</th>
-      <th class="hidden-sm">Martinus url</th>
-      <th class="hidden-sm">Poznámka</th>
-      <th class="hidden-sm">Počet strán</th>
-      <th class="hidden-sm">Cena</th>
-      <th class="hidden-sm">Očakávaný dátum vydania</th>
-      <th class="hidden-sm">Vložil</th>
+      <th class="hidden-sm hidden-xs">Rok vydania</th>
+      <th class="hidden-sm hidden-xs">Martinus url</th>
+      <th class="hidden-sm hidden-xs">Poznámka</th>
+      <th class="hidden-sm hidden-xs">Počet strán</th>
+      <th class="hidden-sm hidden-xs">Cena</th>
+      <th class="hidden-sm hidden-xs">Očakávaný dátum vydania</th>
+      <th class="hidden-sm hidden-xs">Vložil</th>
       <th></th>
       <th></th>
       <th></th>
@@ -68,13 +68,13 @@
         <td><%= wishlist.name %></td>
         <td><%= wishlist.author.name if wishlist.author.present? %></td>
         <td><%= wishlist.publisher.name if wishlist.publisher.present? %></td>
-        <td class="hidden-sm"><%= wishlist.publish_year %></td>
-        <td class="hidden-sm"><%= wishlist.martinus_url %></td>
-        <td class="hidden-sm"><%= wishlist.note %></td>
-        <td class="hidden-sm"><%= wishlist.pages %></td>
-        <td class="hidden-sm"><%= wishlist.price %></td>
-        <td class="hidden-sm"><%= wishlist.expected_release %></td>
-        <td class="hidden-sm"><%= wishlist.user.name if wishlist.user.present? %></td>
+        <td class="hidden-sm hidden-xs"><%= wishlist.publish_year %></td>
+        <td class="hidden-sm hidden-xs"><%= wishlist.martinus_url %></td>
+        <td class="hidden-sm hidden-xs"><%= wishlist.note %></td>
+        <td class="hidden-sm hidden-xs"><%= wishlist.pages %></td>
+        <td class="hidden-sm hidden-xs"><%= wishlist.price %></td>
+        <td class="hidden-sm hidden-xs"><%= wishlist.expected_release %></td>
+        <td class="hidden-sm hidden-xs"><%= wishlist.user.name if wishlist.user.present? %></td>
         <td><a class="confirm_wishlist_table_btn"><i id="<%=wishlist.id%>" class="fa fa-check fa-2x" aria-hidden="true"></i></a></td>
           <td><a class="edit_wishlist_table_btn" data-toggle="modal" data-target="#editWishlistModal"><i id="<%=wishlist.id%>" class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></a></td>
         <td><%= link_to  wishlist, method: :delete, data: { confirm: 'Naozaj ju chceš zmazať?' } do %><i class="fa fa-trash-o fa-2x" aria-hidden="true" ></i>  
