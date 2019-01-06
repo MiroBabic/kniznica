@@ -38,8 +38,8 @@
       <th>Autor</th>
       <th class="hidden-sm hidden-xs">Vydavateľ</th>
       <th class="hidden-sm hidden-xs">Rok vydania</th>
-      <th>Hodnotenie</th>
-      <th>Vložil</th>
+      <th class="hidden-sm hidden-xs">Hodnotenie</th>
+      <th class="hidden-sm hidden-xs">Vložil</th>
       <th class="hidden-sm hidden-xs">Poznámka</th>
       <th></th>
       <th></th>
@@ -53,8 +53,8 @@
         <td><%= book.author.name if book.author.present? %></td>
         <td class="hidden-sm hidden-xs"><%= book.publisher.name if book.publisher.present? %></td>
         <td class="hidden-sm hidden-xs"><%= book.publish_year %></td>
-        <td><div class="rateYo"><%= book.rating %></div></td>
-        <td><%= book.user.name %></td>
+        <td class="hidden-sm hidden-xs"><div class="rateYo"><%= book.rating %></div></td>
+        <td class="hidden-sm hidden-xs"><%= book.user.name %></td>
         <td class="hidden-sm hidden-xs"><%= book.note %></td>
           <td><a class="edit_book_table_btn" data-toggle="modal" data-target="#editBookModal"><i id="<%=book.id%>" class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></a></td>
         <td><%= link_to  book, method: :delete, data: { confirm: 'Naozaj ju chceš zmazať?' } do %><i class="fa fa-trash-o fa-2x" aria-hidden="true" ></i>  
@@ -176,8 +176,8 @@ $('#editBookModal').on('shown.bs.modal', function (e) {
   'order': [2, 'desc'],
   'serverSide': false,
   'stateSave' :true,
-  'dom': 'lfr<"pull-right"B>tip',
-  'buttons': [
+  'dom': 'lfr<"pull-right">tip',
+  /*'buttons': [
   {"extend" : 'copyHtml5',"text":"Copy","className": 'btn btn-default btn-xs'},
   {"extend" : 'excelHtml5',"text": "XLS","className": 'btn btn-default btn-xs'},
   {"extend" : 'csvHtml5',"text": "CSV","className": 'btn btn-default btn-xs'},
@@ -191,7 +191,7 @@ $('#editBookModal').on('shown.bs.modal', function (e) {
   },
   {"extend" : 'pdfHtml5',"text": "PDF","className": 'btn btn-default btn-xs'},
 
-  ],
+  ],*/
   'language': {
         'url': '/datatables_slovak.json'
       },
