@@ -118,7 +118,7 @@ domain: 'mirobabic.com',
 authentication: 'login',
 enable_starttls_auto: true,
 user_name: ENV['EMAIL'],
-password: ENV['PASSWORD']
+password: ENV['EMAILPASSWORD']
 }
 
 config.action_dispatch.default_headers = {
