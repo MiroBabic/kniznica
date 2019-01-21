@@ -26,14 +26,60 @@ class BooksController < ApplicationController
   def modal_create_book
     begin
 
+      require 'nokogiri'
+    require 'openssl'
+    require 'open-uri'
+    require 'json'
+
+
+
      name=params[:name]
      author=params[:author]
      publisher = params[:publisher]
      publish_year = params[:publish_year]
      note = params[:note]
      rating = params[:rating]
+     martinus = params[:martinus]
+
+     if martinus.present?
+      page = Nokogiri::XML(open(martinus))
+
+        book_data = page.xpath('//script[@type="application/ld+json"][1]').text
+        preorder_data = page.xpath('//div[@class="card__content"]/p[@class="mb-small text-color-grey-dark"]').text
+
+        json_book_data = JSON.parse(book_data)
+
+        publisher_name = ''
+        json_book_data["publisher"].each do |publisher|
+          publisher_name = publisher["name"]
+        end
+
+        author_name = ''
+
+        json_book_data["author"].each do |author|
+          author_name = author["name"]
+        end
+
+        price = json_book_data["offers"]["price"]
+        currency = json_book_data["offers"]["priceCurrency"]
+        final_price = (price.to_s) +' '+(currency.to_s)
+        
+
+        @author = Author.where(:name=>author_name.strip).first_or_create
+        @publisher = Publisher.where(:name=>publisher_name.strip).first_or_create
+
+        hh=Hash.new
+        hh[:pages] = json_book_data["numberOfPages"]
+        hh[:thumbnail] = json_book_data["thumbnailUrl"]
+        hh[:price] = final_price
+
+       b=Book.new(:name=>json_book_data["name"], :author_id=>@author.id, :publisher_id=>@publisher.id, :user_id=>current_user.id, :martinus_url=>martinus, :martinus_data=>hh) 
+
+        
+     else
      
-    b=Book.new(:name=>name, :author_id=>author, :publisher_id=>publisher, :note=>note, :publish_year=>publish_year, :user_id=>current_user.id, :rating=>rating)
+        b=Book.new(:name=>name, :author_id=>author, :publisher_id=>publisher, :note=>note, :publish_year=>publish_year, :user_id=>current_user.id, :rating=>rating)
+      end
     
     if (b.save)
 
@@ -64,6 +110,7 @@ class BooksController < ApplicationController
       @book.publish_year = params[:publish_year]
       @book.note = params[:note]
       @book.rating = params[:rating]
+      @book.martinus_url = params[:martinus]
      
     
     
