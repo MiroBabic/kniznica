@@ -41,6 +41,12 @@ class BooksController < ApplicationController
      rating = params[:rating]
      martinus = params[:martinus]
 
+     if params[:author_name].present?
+      a = Author.new(:name=>params[:author_name])
+      a.save
+      author = a.id
+     end
+
      if martinus.present?
       page = Nokogiri::XML(open(martinus))
 
@@ -77,6 +83,8 @@ class BooksController < ApplicationController
 
         
      else
+
+
      
         b=Book.new(:name=>name, :author_id=>author, :publisher_id=>publisher, :note=>note, :publish_year=>publish_year, :user_id=>current_user.id, :rating=>rating)
       end
