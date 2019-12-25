@@ -42,7 +42,8 @@ class BooksController < ApplicationController
      martinus = params[:martinus]
 
      if params[:author_name].present?
-      a = Author.new(:name=>params[:author_name])
+      #a = Author.new(:name=>params[:author_name])
+      a = Author.where(:name => params[:author_name]).first_or_create
       a.save
       author = a.id
      end
