@@ -95,9 +95,11 @@ def update_from_martinus
       @wishlists = Wishlist.all
 
       @wishlists.each do |wishlist|
-        page = Nokogiri::XML(open(wishlist.martinus_url))
+        #page = Nokogiri::XML(open(wishlist.martinus_url))
+        page = Nokogiri::HTML(open(wishlist.martinus_url))
 
-        book_data = page.xpath('//script[@type="application/ld+json"][1]').text
+        #book_data = page.xpath('//script[@type="application/ld+json"][1]').text
+        book_data = page.at('script[type="application/ld+json"]').text
         preorder_data = page.xpath('//div[@class="card__content"]/p[@class="mb-small text-color-grey-dark"]').text
 
         json_book_data = JSON.parse(book_data)

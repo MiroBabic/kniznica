@@ -26,7 +26,8 @@ class BooksController < ApplicationController
   def modal_create_book
     begin
 
-      require 'nokogiri'
+    require 'nokogiri'
+
     require 'openssl'
     require 'open-uri'
     require 'json'
@@ -49,9 +50,13 @@ class BooksController < ApplicationController
      end
 
      if martinus.present?
-      page = Nokogiri::XML(open(martinus))
+   
 
-        book_data = page.xpath('//script[@type="application/ld+json"][1]').text
+      #page = Nokogiri::XML(open(martinus))
+      page = Nokogiri::HTML(open(martinus))
+
+        #book_data = page.xpath('//script[@type="application/ld+json"][1]').text
+        book_data = page.at('script[type="application/ld+json"]').text
         preorder_data = page.xpath('//div[@class="card__content"]/p[@class="mb-small text-color-grey-dark"]').text
 
         json_book_data = JSON.parse(book_data)

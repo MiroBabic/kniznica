@@ -50,6 +50,9 @@ gem 'letsencrypt_plugin'
 
 gem 'rails-i18n'
 
+#active-session
+gem 'activerecord-session_store'
+
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
