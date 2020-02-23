@@ -178,6 +178,19 @@ def move_from_wishlist
   end
 end
 
+  def chart_total_wishlist
+
+    @result = Wishlist.joins(:user).select("count(1) as value, users.name as label").group("users.name")           
+              
+    respond_to do |format|
+      format.json {
+        #render json: (status:"ok" , @result.to_json(:only=> [:label, :value]))
+         render :json => {"status": "ok", "data": @result.to_json(:only=> [:label, :value]) }  
+      }
+    end
+
+  end
+
   # POST /wishlists
   # POST /wishlists.json
   def create

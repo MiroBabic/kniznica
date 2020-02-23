@@ -146,6 +146,44 @@ class BooksController < ApplicationController
   end
   end
 
+  def chart_total_books
+
+    @result = Book.joins(:user).select("count(1) as value, users.name as label").group("users.name")           
+              
+    respond_to do |format|
+      format.json {
+        #render json: (status:"ok" , @result.to_json(:only=> [:label, :value]))
+         render :json => {"status": "ok", "data": @result.to_json(:only=> [:label, :value]) }  
+      }
+    end
+
+  end
+
+  def chart_top_book_publishers
+    @result = Book.joins(:publisher).select("count(1) as value, publishers.name as publisher_name").group("publishers.name").order("value desc").limit(10)
+
+    respond_to do |format|
+      format.json {
+        #render json: (status:"ok" , @result.to_json(:only=> [:label, :value]))
+         render :json => {"status": "ok", "data": @result.to_json(:only=> [:value, :publisher_name]) }  
+      }
+    end
+
+  end
+
+  def chart_top_book_authors
+    @result = Book.joins(:author).select("count(1) as value, authors.name as author_name").group("authors.name").order("value desc").limit(10)
+
+    respond_to do |format|
+      format.json {
+        #render json: (status:"ok" , @result.to_json(:only=> [:label, :value]))
+         render :json => {"status": "ok", "data": @result.to_json(:only=> [:value, :author_name]) }  
+      }
+    end
+
+  end
+
+
   # POST /books
   # POST /books.json
   def create

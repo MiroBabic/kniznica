@@ -74,6 +74,15 @@ function getTrueFalseIcon(data) {
 	return $res;
 }
 
+//js flash
+  function flashMessageFromAjax(msg) {
+    
+    $myhtml ='<div class="alert alert-danger fade in"><a href="#" data-dismiss="alert" class="close">×</a>'+ msg +'</div>'
+
+    return $myhtml;
+}
+  //end js flash
+
 document.addEventListener("turbolinks:load", function() {
   $('#side-menu').metisMenu({toggle: false });
 });

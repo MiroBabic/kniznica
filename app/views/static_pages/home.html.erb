@@ -1,1 +1,184 @@
 <p id="notice"><%= render 'layouts/flash_message' %></p>
+<%= javascript_include_tag 'charts' , 'data-turbolinks-track' => true %>
+
+<h1>Ahoj <%= current_user.name %></h1>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <div id="spinner_box" style="display:none">
+          <div class="sk-spinner sk-spinner-wave" >
+                         <div class="sk-rect1"></div>
+                                <div class="sk-rect2"></div>
+                                <div class="sk-rect3"></div>
+                                <div class="sk-rect4"></div>
+                                <div class="sk-rect5"></div>
+                            </div>
+                </div>
+
+   <div class="col-lg-12 main-box">
+     <div class="ibox float-e-margins">
+      <div class="ibox-content">
+		
+
+				<div class="panel-body">
+										
+					<div id="data1">
+				
+						
+						
+						<div class="row">
+							 <div class="col-sm-6 text-center">
+						       <label class="label label-success">Knihy v knižnici</label>
+						      <div id="piechartbooks" ></div>
+						    </div>
+						    <div class="col-sm-6 text-center">
+						       <label class="label label-success">Knihy vo wishliste</label>
+						      <div id="piechartwishlist" ></div>
+						    </div>
+					
+					</div>
+					<hr>
+					<div class="row">
+						<div  class="col-sm-12 text-center">
+					       <label class="label label-success">Top vydavatelia</label>
+					      <div id="barchartpublishers" ></div>
+					    </div>
+					</div>
+					<hr>
+					<div class="row">
+						<div  class="col-sm-12 text-center">
+					       <label class="label label-success">Top autori</label>
+					      <div id="barchartauthors" ></div>
+					    </div>
+					</div>
+	
+			</div>
+
+		</div>
+
+
+
+
+
+
+
+
+	</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<script>
+
+
+
+
+var ready = function() {
+
+
+ $.ajax({
+        url : '/chart_total_books.json',    
+    }).done(function(data){
+    	if (data.status == 'ok'){
+    		    		
+    	//console.log(data)
+        Morris.Donut({
+          element: 'piechartbooks',
+          data: JSON.parse(data.data),
+           resize: true,
+           colors: ['#87d6c6', '#1c84c6']
+        });
+    	}
+    	else {
+    		$("#notice").html(flashMessageFromAjax('Nepodarilo sa natiahnuť údaje do grafov'));
+    	}
+
+    }).fail(function(){
+    	$("#notice").html(flashMessageFromAjax('Nepodarilo sa natiahnuť údaje do grafov'));
+    });
+
+
+ $.ajax({
+        url : '/chart_total_wishlist.json',    
+    }).done(function(data){
+    	if (data.status == 'ok'){
+    		    		
+    	//console.log(data)
+        Morris.Donut({
+          element: 'piechartwishlist',
+          data: JSON.parse(data.data),
+           resize: true,
+           colors: ['#87d6c6', '#1c84c6']
+        });
+    	}
+    	else {
+    		$("#notice").html(flashMessageFromAjax('Nepodarilo sa natiahnuť údaje do grafov'));
+    	}
+
+    }).fail(function(){
+    	$("#notice").html(flashMessageFromAjax('Nepodarilo sa natiahnuť údaje do grafov'));
+    });
+
+
+  $.ajax({
+        url : '/chart_top_book_publishers.json',    
+    }).done(function(data){
+    	if (data.status == 'ok'){
+    		    		
+    	//console.log(data)
+        Morris.Bar({
+		  element: 'barchartpublishers',
+		  data: JSON.parse(data.data),
+		  xkey: 'publisher_name',
+		  barColors: ['#87d6c6'],
+		  resize: true,
+		  ykeys: ['value'],
+		  labels: ['Počet kníh']
+		});
+    	}
+    	else {
+    		$("#notice").html(flashMessageFromAjax('Nepodarilo sa natiahnuť údaje do grafov'));
+    	}
+
+    }).fail(function(){
+    	$("#notice").html(flashMessageFromAjax('Nepodarilo sa natiahnuť údaje do grafov'));
+    });
+
+   $.ajax({
+        url : '/chart_top_book_authors.json',    
+    }).done(function(data){
+    	if (data.status == 'ok'){
+    		    		
+    	//console.log(data)
+        Morris.Bar({
+		  element: 'barchartauthors',
+		  data: JSON.parse(data.data),
+		  barColors: [ '#1c84c6'],
+		  xkey: 'author_name',
+		  resize: true,
+		  ykeys: ['value'],
+		  labels: ['Počet kníh']
+		});
+    	}
+    	else {
+    		$("#notice").html(flashMessageFromAjax('Nepodarilo sa natiahnuť údaje do grafov'));
+    	}
+
+    }).fail(function(){
+    	$("#notice").html(flashMessageFromAjax('Nepodarilo sa natiahnuť údaje do grafov'));
+    });
+
+ 
+
+};
+ 
+
+
+
+$(".static_pages.home").ready(ready);
+
+$(".static_pages.home").on('turbolinks:load', ready);
+
+</script>
