@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_22_182730) do
+ActiveRecord::Schema.define(version: 2020_02_23_115427) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 2020_02_22_182730) do
     t.integer "dead_year"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_authors_on_name"
   end
 
   create_table "books", force: :cascade do |t|
@@ -37,7 +38,10 @@ ActiveRecord::Schema.define(version: 2020_02_22_182730) do
     t.string "martinus_url"
     t.jsonb "martinus_data"
     t.index ["author_id"], name: "index_books_on_author_id"
+    t.index ["id"], name: "index_books_on_id"
+    t.index ["name"], name: "index_books_on_name"
     t.index ["publisher_id"], name: "index_books_on_publisher_id"
+    t.index ["rating"], name: "index_books_on_rating"
     t.index ["user_id"], name: "index_books_on_user_id"
   end
 
@@ -46,6 +50,7 @@ ActiveRecord::Schema.define(version: 2020_02_22_182730) do
     t.string "country"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_publishers_on_name"
   end
 
   create_table "sessions", force: :cascade do |t|

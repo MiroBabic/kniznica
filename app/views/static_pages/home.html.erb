@@ -1,7 +1,7 @@
 <p id="notice"><%= render 'layouts/flash_message' %></p>
 <%= javascript_include_tag 'charts' , 'data-turbolinks-track' => true %>
 
-<h1>Ahoj <%= current_user.name %></h1>
+<h1>Ahoj <%= current_user.name %>, v knižnici je aktuálne <strong><%= get_book_count %></strong> kníh</h1>
 
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="row">
