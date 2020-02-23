@@ -22,7 +22,7 @@
                         </div>
                       </li>
                     
-                            <li><%= link_to root_path do%><i class="fa fa-bar-chart" aria-hidden="true"></i> <span class="nav-label">Prehľad</span><%end%></li>
+                            <li><%= link_to root_path, data: { turbolinks: false } do%><i class="fa fa-bar-chart" aria-hidden="true"></i> <span class="nav-label">Prehľad</span><%end%></li>
                             <li><%= link_to books_path do %><i class="fa fa-book" aria-hidden="true"></i> <span class="nav-label">Knihy</span><%end%></li>
                             <li><%= link_to wishlists_path do%><i class="fa fa-shopping-basket" aria-hidden="true"></i> <span class="nav-label">Wishlist</span><%end%></li>
                             <li><%= link_to authors_path do%><i class="fa fa-users" aria-hidden="true"></i> <span class="nav-label">Autori</span><%end%></li>
