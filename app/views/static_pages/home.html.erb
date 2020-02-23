@@ -76,10 +76,7 @@
 
 
 var ready = function() {
-$('#piechartbooks').empty();
-$('#piechartwishlist').empty();
-$('#barchartpublishers').empty();
-$('#barchartauthors').empty();
+
 
 
  $.ajax({
@@ -182,6 +179,15 @@ $('#barchartauthors').empty();
 
 
 $(".static_pages.home").ready(ready);
+
+document.addEventListener('turbolinks:before-cache', function() {
+ $('#piechartbooks').empty();
+$('#piechartwishlist').empty();
+$('#barchartpublishers').empty();
+$('#barchartauthors').empty();
+
+
+});
 
 $(".static_pages.home").on('turbolinks:load', ready);
 
