@@ -35,7 +35,7 @@ gem 'font-awesome-sass', '~> 4.7.0'
 gem 'bootstrap-sass', '~> 3.4.1'
 gem 'ajax-datatables-rails', github: 'ajahongir/ajax-datatables-rails', branch: 'v-0-4-0'
 
-gem 'carrierwave', '~> 1.0'
+gem 'carrierwave', '~> 1.3'
 gem 'rmagick'
 
 gem 'delayed_job_active_record'
